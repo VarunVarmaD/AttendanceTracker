@@ -4,8 +4,9 @@ const path = require('path');
 const Student = require('./models/Student');
 const app = express();
 
-// 🔗 MongoDB Atlas connection (direct, no .env)
-mongoose.connect('mongodb+srv://VarunVarma:varundantuluri@cluster0.oj3oz4a.mongodb.net/attendance?retryWrites=true&w=majority&appName=Cluster0', {
+// ✅ MongoDB Atlas connection using environment variable
+const MONGO_URI = process.env.MONGODB_URI;
+mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected'))
@@ -34,16 +35,13 @@ app.post('/api/attendance/:id', async (req, res) => {
 
         const date = req.body.date ? new Date(req.body.date) : new Date();
 
-        // Optional: prevent duplicate entries for same date
         const alreadyMarked = student.attendance.find(entry =>
             new Date(entry.date).toDateString() === date.toDateString()
         );
 
         if (alreadyMarked) {
-            // Overwrite status for that day
             alreadyMarked.present = req.body.present;
         } else {
-            // Add new entry
             student.attendance.push({ date, present: req.body.present });
         }
 
@@ -64,7 +62,7 @@ app.get('/api/students', async (req, res) => {
     }
 });
 
-// ✅ Get a specific student by ID (for calendar view)
+// ✅ Get a specific student by ID
 app.get('/api/students/:id', async (req, res) => {
     try {
         const student = await Student.findById(req.params.id);
@@ -75,7 +73,7 @@ app.get('/api/students/:id', async (req, res) => {
     }
 });
 
-// ✅ Delete a student by ID
+// ✅ Delete a student
 app.delete('/api/students/:id', async (req, res) => {
     try {
         const student = await Student.findByIdAndDelete(req.params.id);
@@ -87,5 +85,5 @@ app.delete('/api/students/:id', async (req, res) => {
 });
 
 // 🟢 Start server
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
