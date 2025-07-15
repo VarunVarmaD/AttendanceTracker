@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         present: entry.present
     }));
 
-    document.getElementById('studentName').textContent = `📊 ${student.name}'s Attendance`;
+    document.getElementById('studentName').textContent = `${student.name}'s Attendance`;
 
     const monthPicker = document.getElementById('monthPicker');
     const today = new Date();
@@ -53,7 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (match) {
                 dayCell.classList.add(match.present ? 'present' : 'absent');
-                dayCell.textContent += match.present ? ' ✅' : ' ❌';
+                const statusText = document.createElement('small');
+                statusText.style.display = 'block';
+                statusText.style.fontSize = '0.75em';
+                statusText.textContent = match.present ? 'Present' : 'Absent';
+                dayCell.appendChild(statusText);
             }
 
             grid.appendChild(dayCell);

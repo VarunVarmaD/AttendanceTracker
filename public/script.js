@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
             li.innerHTML = `
                 <strong>${student.name}</strong>
                 <div class="actions">
-                    <input type="date" id="date-${student._id}" value="${today}" />
-                    <button onclick="markAttendance('${student._id}', true)">✅ Present</button>
-                    <button onclick="markAttendance('${student._id}', false)">❌ Absent</button>
-                    <button onclick="window.location.href='student.html?id=${student._id}'">📅 View Calendar</button>
-                    <button onclick="deleteStudent('${student._id}')">🗑️ Delete</button>
+                    <input type="date" id="date-${student._id}" value="${today}" class="form-control form-control-sm d-inline w-auto me-2 mb-2" />
+                    <button class="btn btn-success btn-sm me-1" onclick="markAttendance('${student._id}', true)">Present</button>
+                    <button class="btn btn-danger btn-sm me-1" onclick="markAttendance('${student._id}', false)">Absent</button>
+                    <button class="btn btn-primary btn-sm me-1" onclick="window.location.href='student.html?id=${student._id}'">View Calendar</button>
+                    <button class="btn btn-secondary btn-sm" onclick="deleteStudent('${student._id}')">Delete</button>
                 </div>
             `;
             studentList.appendChild(li);
